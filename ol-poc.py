@@ -251,7 +251,7 @@ def download_covers(isbn_cache):
             continue
         # Download medium files only. This requires one request while large files require two (first + redirect)
         path = f'/b/id/{cover_i}-M.jpg'
-        g_total_api_calls += 1
+        g_total_api_calls += 0 # not rate limited; don't count towards overall API count?
         res = g_api_session.get(curl(path))
         write_cover(res,isbn_pair,filename_base)
 
