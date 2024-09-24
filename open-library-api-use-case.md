@@ -578,7 +578,7 @@ Now that you know more about the Open Library Search, Books, and Covers APIs in 
 6. Iterate over your books in your cache object and use the Cover ID to make a call to the [Covers API](#open-library-covers-api) to pull the medium image.
 7. Write the book metadata from your cache object in whatever format you desire (CSV, etc).
 
-An example implementation written in Python is linked below.  The script requires the Python `requests` module which you can install with `pip` in your Python environment.  Execute the script without any arguments for further information about what it does and how to run it.
+An example implementation written in Python is linked below.  The script requires the Python [requests](https://pypi.org/project/requests/) module which you can install with `pip` in your Python environment.  Execute the script without any arguments for further information about what it does and how to run it.
 
 :warning: The script is a proof-of-concent only and is entirely unsupported.
 
