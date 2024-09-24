@@ -562,12 +562,12 @@ https://covers.openlibrary.org/b/id/135046-M.jpg
 Now that you know more about the Open Library Search, Books, and Covers APIs in the context of this [use case](#use-case) you can find book metadata about initial ISBNs, find suggestions based per author and genre combination, and download cover data -- all with minimal API calls. Here's a general approach.
 
 1. Establish your initial set of input ISBNs. They can be ISBN10 or ISBN13 flavors.
-2. Execute the [Search API](the-open-library-search-api) to find data about those books with one call! You do this by logically OR'ing the ISBN values in the `{QUERY}` value. Be sure to set the `fields` query parameter to select the fields needed, as [discussed earlier](#use-case-fields). The query parameters should be like :warning: (this is a long line, scroll right as needed):
+2. Execute the [Search API](the-open-library-search-api) to find data about those books with one call! You do this by logically OR'ing the ISBN values in the `{QUERY}` value. Be sure to set the `fields` query parameter to select the fields needed, as [discussed earlier](#use-case-fields). The query parameters should be like :warning: *(this is a long line, scroll right as needed)*:
 ```
 q=isbn:(ISBN1 OR ISBN2 OR ... OR ISBNN)&fields=key,author_key,author_name,first_publish_year,ddc_sort,number_of_pages_median,editions,editions.key,editions.title_sort,editions.isbn
 ```
 3. For each Work in the response, save the desired Work-level and Edition-level metadata to some cache object index by ISBN.
-4. For each `author_key` and `ddc_sort` combination, execute a new search for that author and DDC combination, with a [limit](#query-parameter-limitlimit) of `3` and a [sort value](#query-parameter-sortsort) of `rating`. You may need to take care to exclude books you've alreay retreived by using a `NOT` expression in your `{QUERY}`. For example, you can gather the titles from your already-retrieved book data and create a NOT'd expression to use in the suggestion search (this is a long line, scroll right as needed):
+4. For each `author_key` and `ddc_sort` combination, execute a new search for that author and DDC combination, with a [limit](#query-parameter-limitlimit) of `3` and a [sort value](#query-parameter-sortsort) of `rating`. You may need to take care to exclude books you've alreay retreived by using a `NOT` expression in your `{QUERY}`. For example, you can gather the titles from your already-retrieved book data and create a NOT'd expression to use in the suggestion search :warning: *(this is a long line, scroll right as needed)*:
 ```
 q=author_key:AUTHKEY AND ddc_sort:DDC AND NOT title_sort:(TITLE1 OR TITLE2 OR ... OR TITLEN)&fields=key,author_key,author_name,first_publish_year,ddc_sort,number_of_pages_median,editions,editions.key,editions.title_sort,editions.isbn
 ```
