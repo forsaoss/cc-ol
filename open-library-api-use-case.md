@@ -571,7 +571,7 @@ Now that you know more about the Open Library Search, Books, and Covers APIs in 
   ```
   q=author_key:AUTHKEY AND ddc_sort:DDC AND NOT title_sort:(TITLE1 OR TITLE2 OR ... OR TITLEN)&fields=key,author_key,author_name,first_publish_year,ddc_sort,number_of_pages_median,editions,editions.key,editions.title_sort,editions.isbn
   ```
-Update your cache object with the desired Work-level and Edition-level metdata.
+  Update your cache object with the desired Work-level and Edition-level metdata.
 5. If exact number of pages is needed you can iterate over your books in your cache object and use the Edition key (Book ID) in a call to the [Books API](#open-library-books-api) to get the exact page count. Note that this will cost an extra API call per book!
 6. Iterate over your books in your cache object and use the Cover ID to make a call to the [Covers API](#open-library-covers-api) to pull the medium image.
 7. Write the book metadata from your cache object in whatever format you desire (CSV, etc).
