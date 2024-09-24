@@ -4,14 +4,13 @@
 1. [Use Case](#use-case)
 1. [The Open Library Search API](#the-open-library-search-api)
    1. [Query Parameters Summary](#query-parameters-summary)
-   1. [Query parameter q={QUERY}](#query-parameter-q--query-)
-   1. [Query parameter fields={FIELDS}](#query-parameters-summary)
-   1. [Query parameter sort={SORT}](#query-parameters-summary)
-   1. [Query parameter limit={LIMIT}](#query-parameters-summary)
-1. [Open Library Books API](#query-parameters-summary)
-1. [Open Library Books API](#query-parameters-summary)
-1. [Open Library Covers API](#query-parameters-summary)
-1. [Putting All Together](#query-parameters-summary)
+   1. [Query parameter q={QUERY}](#query-parameter-qquery)
+   1. [Query parameter fields={FIELDS}](#query-parameter-fieldsfields)
+   1. [Query parameter sort={SORT}](#query-parameter-sortsort)
+   1. [Query parameter limit={LIMIT}](#query-parameter-limitlimit)
+1. [Open Library Books API](#open-library-books-api)
+1. [Open Library Covers API](#open-library-covers-api)
+1. [Putting All Together](#putting-it-all-together)
 
 # Open Library API: A Use Case
 The Open Library API is a powerful tool for retrieving book metadata from the vast Open Library database. With this API you can search for books by title, author, ISBN, and more. You can retrieve detailed information about books, including its title, author, publisher, page count, cover image, and so much more.
