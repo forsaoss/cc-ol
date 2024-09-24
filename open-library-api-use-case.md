@@ -17,7 +17,7 @@ The Open Library API is a powerful tool for retrieving book metadata from the va
 
 This knowledge document will discuss three APIs in the context of a practical use case:
 
-* [Search](https://openlibrary.org/dev/docs/api/search) API:  the all-encompasing search API that can return data for multiple books based on powerful search criteria
+* [Search](https://openlibrary.org/dev/docs/api/search) API:  the all-encompassing search API that can return data for multiple books based on powerful search criteria
 * [Books](https://openlibrary.org/dev/docs/api/books) API: for returning book-specific information like title, page count, etc
 * [Covers](https://openlibrary.org/dev/docs/api/covers) API: for fetching images of book covers
 
@@ -137,7 +137,7 @@ Successful responses are in JSON format.  Example response showing Work and Edit
 
 The following JSON attributes are notable for the particular use case described in this document.
 
-| Name (jq path) | Type | Level | Description |
+| Name ([jq](https://jqlang.github.io/jq/manual/) path notation) | Type | Level | Description |
 | --- | --- | --- | --- |
 | `.numFound` | number | Work | Number of Works found by the query before the `fields` parameter (if any) was applied |
 | `.docs` | array | Work | Array of Work objects. Check the length of this to see the actual number of Works returned after `fields` were applied. |
@@ -157,7 +157,7 @@ The following JSON attributes are notable for the particular use case described 
 | Parameter Name | Description | Required |
 | :--- | :--- | :---: |
 | q | This is the search query.  Its value `{QUERY}` specifies Work or Edition field:value pairs or a logical expression defining the search criteria. | Yes |
-| fields | This is a field specification. Its value `{FIELDS}` specifies which Work or Edition fields to return in the respone. | No |
+| fields | This is a field specification. Its value `{FIELDS}` specifies which Work or Edition fields to return in the response. | No |
 | sort | Sorting method. It's value `{SORT}` specifies how to sort the results. | No |
 | limit | Limit the results to no more than `{LIMIT}` items. Must be greater than zero. | No |
 
@@ -244,7 +244,7 @@ The `{FIELDS}` value of the optional `fields` query parameter is a comma-separat
    }
    ```
 
-Each object at the Work-level (outer `docs` array) has an attribute named `key` which denotes the Work identifier.  To return just that field in the JSON response we'd use a query contructed thusly:
+Each object at the Work-level (outer `docs` array) has an attribute named `key` which denotes the Work identifier.  To return just that field in the JSON response we'd use a query constructed thusly:
 ```
 https://openlibrary.org/search.json?q=isbn:0201514257&fields=key
 ```
@@ -298,7 +298,7 @@ This returns:
 }
 ```
 
-Wait? Where's the rest of the Edition data? Didn't we just ask for the whole "editions" field and corrsponding object? Yes, however the Work and the Edition both have a field named `key`. Since `key` was specified as a field selector it was applied to the Work *AND* the Edition. This is true for a number of field names that the Work and Edition objects have in common, like `title_sort`, `isbn` and so forth.
+Wait? Where's the rest of the Edition data? Didn't we just ask for the whole "editions" field and corresponding object? Yes, however the Work and the Edition both have a field named `key`. Since `key` was specified as a field selector it was applied to the Work *AND* the Edition. This is true for a number of field names that the Work and Edition objects have in common, like `title_sort`, `isbn` and so forth.
 
 Specifying only Work-level field names to get fields in the Work and Edition isn't ideal because it produces redundant data.  For example, if the field specifier is `key,editions,isbn` you'll get a list of *ALL* ISBNs for that Work at the Work-level, and then the Edition-specific ISBN at the Edition-level.  The latter is usually what you want, and it is what we want in this use case.
 
@@ -391,11 +391,11 @@ Which returns:
   "offset": null
 }
 ```
-This is much more managable.
+This is much more manageable.
 
 <a name="use-case-fields"></a>
 The full list of `{FIELDS}` that we need for this use case is:
-| Field | Level | Descsription |
+| Field | Level | Description |
 | --- | --- | --- |
 | `key` | Work | Work ID |
 | `author_key` | Work | Author ID(s) |
@@ -498,7 +498,7 @@ https://openlibrary.org/books/OL2214090M.json
 ```
 This returns a lot of metadata about the book, most of which we don't need for this use case. The *ONLY* field we need for this use case is `number_of_pages` which gives the exact number of pages for that book.  Contrast that with the `number_of_pages_median` of a Work which is the median number of pages across all Editions of that Work; unless there's only one book in the Work, `number_of_pages_median` and `number_of_pages` very likely will be different.
 
-Making an API call just to get the number of pages is expensive: it's an entire addtional API call for one value! If you are needing to keep the API calls to an absolute minimum, you could:
+Making an API call just to get the number of pages is expensive: it's an entire additional API call for one value! If you are needing to keep the API calls to an absolute minimum, you could:
 * Suffice and use the `number_of_pages_median` as the page count for a given book. It may not be exact but it should be close!
 * Look at `editions.numFound` at the Edition-level. If it is exactly 1 you can be confident that the book's `number_of_pages` is the same as `number_of_pages_median` at the Work-level, and avoid the extra Books API call to get the page count.
 
@@ -549,9 +549,9 @@ Which returns:
 `{COVER_ID}` for this book is `135046`.
 
 `{SIZE}` specifies the desired relative size of image to retrieve. It is one of `S`, `M`, or `L` only. Note the following:
-* `S` (small) is often unusuable because the images are very small by modern standards.
+* `S` (small) is often unusable because the images are very small by modern standards.
 * `M` (medium) is more usable and preferred.
-* `L` (large) is better quality than medium; however, retieving large images often required TWO requests per call: the initial Covers API request and a redirect to actually fetch the image. If conserving API calls is necessary, fetching Large images is not ideal.
+* `L` (large) is better quality than medium; however, retrieving large images often required TWO requests per call: the initial Covers API request and a redirect to actually fetch the image. If conserving API calls is necessary, fetching Large images is not ideal.
 
 To download the medium-sized image, make a GET request to:
 ```
@@ -573,13 +573,13 @@ Now that you know more about the Open Library Search, Books, and Covers APIs in 
    ```
    q=author_key:AUTHKEY AND ddc_sort:DDC AND NOT title_sort:(TITLE1 OR TITLE2 OR ... OR TITLEN)&fields=key,author_key,author_name,first_publish_year,ddc_sort,number_of_pages_median,editions,editions.key,editions.title_sort,editions.isbn
    ```
-   Update your cache object with the desired Work-level and Edition-level metdata.
+   Update your cache object with the desired Work-level and Edition-level metadata.
 5. If exact number of pages is needed you can iterate over your books in your cache object and use the Edition key (Book ID) in a call to the [Books API](#open-library-books-api) to get the exact page count. Note that this will cost an extra API call per book!
 6. Iterate over your books in your cache object and use the Cover ID to make a call to the [Covers API](#open-library-covers-api) to pull the medium image.
 7. Write the book metadata from your cache object in whatever format you desire (CSV, etc).
 
 An example implementation written in Python is linked below.  The script requires the Python [requests](https://pypi.org/project/requests/) module which you can install with `pip` in your Python environment.  Execute the script without any arguments for further information about what it does and how to run it.
 
-:warning: The script is a proof-of-concent only and is entirely unsupported.
+:warning: The script is a proof-of-concept only and is entirely unsupported.
 
 [Open Library API POC](ol-poc.py)
