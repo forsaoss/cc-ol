@@ -559,24 +559,25 @@ https://covers.openlibrary.org/b/id/135046-M.jpg
 ```
 
 # Putting All Together
-Now that you know more about the Open Library Search, Books, and Covers APIs in the context of this [use case](#use-case) you can find book metadata about initial ISBNs, find suggestions based per author and genre combination, and download cover data -- all with minimal API calls. Here's how to go about it:
+Now that you know more about the Open Library Search, Books, and Covers APIs in the context of this [use case](#use-case) you can find book metadata about initial ISBNs, find suggestions based per author and genre combination, and download cover data -- all with minimal API calls. Here's a general approach.
 
 1. Establish your initial set of input ISBNs. They can be ISBN10 or ISBN13 flavors.
-2. Execute the Search API to find data about those books with one call! You do this by logically OR'ing the ISBN values in the `{QUERY}` value. Be sure to set the `fields` query parameter to select the fields needing, as [discussed earlier](#use-case-fields). The query parameters should be like (this is a long line, scroll right as needed):
+2. Execute the [Search API](the-open-library-search-api) to find data about those books with one call! You do this by logically OR'ing the ISBN values in the `{QUERY}` value. Be sure to set the `fields` query parameter to select the fields needed, as [discussed earlier](#use-case-fields). The query parameters should be like :warning: (this is a long line, scroll right as needed):
 ```
 q=isbn:(ISBN1 OR ISBN2 OR ... OR ISBNN)&fields=key,author_key,author_name,first_publish_year,ddc_sort,number_of_pages_median,editions,editions.key,editions.title_sort,editions.isbn
 ```
 3. For each Work in the response, save the desired Work-level and Edition-level metadata to some cache object index by ISBN.
-4. For each `author_key` and `ddc_sort` combination, execute a new search for that author and DDC combination, with a limit of 3. You may need to take care to exclude books you've alreay retreived by using a `NOT` expression in your `{QUERY}`. For example, you can gather the titles from your already-retrieved book data and create a NOT'd expression to use in the suggestion search (this is a long line, scroll right as needed):
+4. For each `author_key` and `ddc_sort` combination, execute a new search for that author and DDC combination, with a [limit](#query-parameter-limitlimit) of `3` and a [sort value](#query-parameter-sortsort) of `rating`. You may need to take care to exclude books you've alreay retreived by using a `NOT` expression in your `{QUERY}`. For example, you can gather the titles from your already-retrieved book data and create a NOT'd expression to use in the suggestion search (this is a long line, scroll right as needed):
 ```
 q=author_key:AUTHKEY AND ddc_sort:DDC AND NOT title_sort:(TITLE1 OR TITLE2 OR ... OR TITLEN)&fields=key,author_key,author_name,first_publish_year,ddc_sort,number_of_pages_median,editions,editions.key,editions.title_sort,editions.isbn
 ```
 Update your cache object with the desired Work-level and Edition-level metdata.
-5. If exact number of pages is needed you can iterate over your books in your cache object and use the Edition key (Book ID) in a call to the Books API to get the exact page count. Note that this will cost an extra API call per book!
-6. Iterate over your books in your cache object and use the Cover ID to make a call to the Covers API to pull the medium image.
+5. If exact number of pages is needed you can iterate over your books in your cache object and use the Edition key (Book ID) in a call to the [Books API](#open-library-books-api) to get the exact page count. Note that this will cost an extra API call per book!
+6. Iterate over your books in your cache object and use the Cover ID to make a call to the [Covers API](#open-library-covers-api) to pull the medium image.
 7. Write the book metadata from your cache object in whatever format you desire (CSV, etc).
 
+An example implementation written in Python is linked below.  The script requires the Python `requests` module which you can install with `pip` in your Python environment.  Execute the script without any arguments for further information about what it does and how to run it.
 
-An example implementation written in Python is available here.  The script requires the Python `requests` module which you can install with `pip` in your Python environment.  Execute the script without any arguments for further information about what it does and how to run it. :warning: The script is a proof-of-concent only and is entirely unsupported.
+:warning: The script is a proof-of-concent only and is entirely unsupported.
 
 [Open Library API POC](ol-poc.py)
