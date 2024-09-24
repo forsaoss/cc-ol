@@ -551,7 +551,7 @@ Which returns:
 `{SIZE}` specifies the desired relative size of image to retrieve. It is one of `S`, `M`, or `L` only. Note the following:
 * `S` (small) is often unusable because the images are very small by modern standards.
 * `M` (medium) is more usable and preferred.
-* `L` (large) is better quality than medium; however, retrieving large images often required TWO requests per call: the initial Covers API request and a redirect to actually fetch the image. If conserving API calls is necessary, fetching Large images is not ideal.
+* `L` (large) is better quality than medium; however, retrieving large images often required TWO requests per call: the initial Covers API request and a redirect to actually fetch the image.
 
 To download the medium-sized image, make a GET request to:
 ```
