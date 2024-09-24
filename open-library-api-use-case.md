@@ -559,7 +559,7 @@ https://covers.openlibrary.org/b/id/135046-M.jpg
 ```
 
 > [!IMPORTANT]
-> When covers are downloaded via their Cover ID the API call is not rate limited, and therefore not counted towards any API quota.
+> When covers are downloaded via their Cover ID the API call is not rate limited, and therefore not counted towards any API requests quota.
 
 # Putting It All Together
 Now that you know more about the Open Library Search, Books, and Covers APIs in the context of this [use case](#use-case) you can find book metadata about initial ISBNs, find suggestions based per author and genre combination, and download cover data -- all with minimal API calls. Here's a general approach.
