@@ -60,23 +60,27 @@ g_arg_isbn_list = None
 # g_base_cover_url noted above.
 g_total_api_calls = 0
 
+# g_title_field : str
+# Experimental to see the differences between using 'title' vs 'title_sort'
+g_title_field = 'title_sort'
+
 # g_ol_search_fields : list
 # Set of search fields we're interested in for the calls to be made to the
 # 'search.json' endpoint of the API. We want certain fields for the overall
 # work as well as the editions.
 g_ol_search_fields = [
-    'key',                      # work ID
-    'author_key',               # work's author ID
-    'author_name',              # work's author name
-    'first_publish_year',       # work's first publish yeah
-    'ddc_sort',                 # work's ddc (Dewey Decimal Classification) number
-    'number_of_pages_median',   # work's median number of pages
-    'editions',                 # the edition's object
-    'editions.title_sort',      # edition's title
-    'editions.cover_i',         # edition's cover ID
-    'editions.key',             # edition's ID -- used to get extact page count
-    'editions.isbn',            # edition's ISBN(s)
-    'editions.language'         # edition's language
+    'key',                          # work ID
+    'author_key',                   # work's author ID
+    'author_name',                  # work's author name
+    'first_publish_year',           # work's first publish yeah
+    'ddc_sort',                     # work's ddc (Dewey Decimal Classification) number
+    'number_of_pages_median',       # work's median number of pages
+    'editions',                     # the edition's object
+    f'editions.{g_title_field}',    # edition's title
+    'editions.cover_i',             # edition's cover ID
+    'editions.key',                 # edition's ID -- used to get extact page count
+    'editions.isbn',                # edition's ISBN(s)
+    'editions.language'             # edition's language
 ]
 
 ###
@@ -92,9 +96,12 @@ def paren(s):
     return f'({s})'
 
 def logic_join(things,op='OR'):
-    if len(things) == 0:
+    n = len(things)
+    if n == 0:
         return ''
-    return paren(f' {op} '.join(things))
+    logic = f' {op} '.join(things)
+    # No need to put parens around single items.
+    return (paren(logic) if n > 1 else logic)
 
 def unique_list(x):
     y = []
@@ -299,7 +306,7 @@ def get_cache_item(doc,t):
     item['first_publish_year'] = doc.get('first_publish_year',"N/A")
     item['number_of_pages_median'] = doc.get('number_of_pages_median',"N/A")
     item['book'] = doc.get('editions',[]).get('docs',[])[0].get('key').split('/')[2]
-    item['title'] = doc.get('editions',[]).get('docs',[])[0].get('title_sort',"N/A")
+    item['title'] = doc.get('editions',[]).get('docs',[])[0].get(g_title_field,"N/A")
     #if t == 'init':
     #    item['isbn'] = first_in_common(g_arg_isbn_list,doc.get('editions',[]).get('docs',[])[0].get('isbn'))
     #else:
@@ -405,10 +412,10 @@ def get_suggested_by_ddc(isbn_cache):
             titles = get_title_excludes(isbn_cache)
             q = logic_join([paren(f'ddc_sort:{x}'), paren(f'author_key:{y}')],'AND')
             #q += ' AND NOT ' + paren('work:' + logic_join(works,'OR'))
-            q += ' AND NOT ' + paren('title_sort:' + logic_join(titles,'OR'))
-            #print(q+"\n")
+            q += ' AND NOT ' + paren(f'{g_title_field}:' + logic_join(titles,'OR'))
             #limit = get_count_by_author(isbn_cache, y) + 3
             limit = 3
+            print(q)
             get_isbn_cache(q,isbn_cache,'suggestion',limit)
     return isbn_cache
 
