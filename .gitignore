@@ -2,3 +2,6 @@ tmp
 .DS_Store
 .*.swp
 ._.*
+*.txt
+*.jpg
+*.csv

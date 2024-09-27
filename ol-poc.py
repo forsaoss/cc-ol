@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# vim:tw=0:
 import json
 import requests
 import sys
@@ -225,7 +226,7 @@ def output_items(isbn_cache):
            sugg_list.append({ x : data})
     fp = open("output.csv", "wt")
     writer = csv.writer(fp, delimiter=',', quotechar='"', quoting=csv.QUOTE_ALL)
-    writer.writerow(["ISBN10/ISBN13","Title","Author(s)","First Year Published","Pages (median)","Pages","Type","Work","Language","Book"])
+    writer.writerow(["ISBN10/ISBN13","Title","Author(s)","First Year Published","Pages (median)","Pages","Type","Work ID","Book ID","Language","DDC"])
     for x in input_list:
         write_item(x,writer)
         y = find_related_suggestions(x,sugg_list)
@@ -278,8 +279,9 @@ def write_item(item,writer):
     row.append(str(data['pages']))
     row.append(str(data['type']))
     row.append(str(data['work']))
-    row.append(str(data['language']))
     row.append(str(data['book']))
+    row.append(str(data['language']))
+    row.append(str(data['ddc_sort']))
     writer.writerow(row)
 
 def get_cache_item(doc,t):
